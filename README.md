@@ -73,7 +73,7 @@ $cd source
 # $make STARforMacStatic CXX=/usr/local/Cellar/gcc/8.2.0/bin/g++-8
 # New 09/2025
 # To let the compiling process works for m-chip macOS, using
-$ make -n STAR CXXFLAGS_SIMD="-std=c++11" LDFLAGS="-std=c++11 -lc++"
+$ make STAR CXXFLAGS_SIMD="-std=c++11" LDFLAGS="-std=c++11 -lc++"
 
 # 4. Make it availible through the terminal
 $cp STAR /usr/local/bin
