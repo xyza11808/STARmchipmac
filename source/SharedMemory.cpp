@@ -12,9 +12,15 @@
 #include <errno.h>
 #include <sys/types.h>
 
-#if defined(COMPILE_FOR_MAC) || defined(__FreeBSD__)
-  //some Mac's idiosyncrasies: standard SHM libraries are very old and missing some definitions
-  #define SHM_NORESERVE 0
+// #if defined(COMPILE_FOR_MAC) || defined(__FreeBSD__)
+//   //some Mac's idiosyncrasies: standard SHM libraries are very old and missing some definitions
+//   #define SHM_NORESERVE 0
+// #endif
+
+#ifdef __linux__
+    #define SHM_FLAGS IPC_CREAT | IPC_EXCL | SHM_NORESERVE | 0666
+#else
+    #define SHM_FLAGS IPC_CREAT | IPC_EXCL | 0666
 #endif
 
 using namespace std;
@@ -106,7 +112,7 @@ void SharedMemory::CreateAndInitSharedObject(size_t shmSize)
 #ifdef POSIX_SHARED_MEM
     _shmID=shm_open(GetPosixObjectKey().c_str(), O_CREAT | O_RDWR | O_EXCL, 0666);
 #else
-    _shmID=shmget(_key, toReserve, IPC_CREAT | IPC_EXCL | SHM_NORESERVE | 0666); //        _shmID = shmget(shmKey, shmSize, IPC_CREAT | SHM_NORESERVE | SHM_HUGETLB | 0666);
+    _shmID=shmget(_key, toReserve, SHM_FLAGS); //        _shmID = shmget(shmKey, shmSize, IPC_CREAT | SHM_NORESERVE | SHM_HUGETLB | 0666);
 #endif
 
     if (_shmID == -1)
@@ -251,7 +257,7 @@ void SharedMemory::EnsureCounter()
     if (!exists)
     {
         errno=0;
-        _sharedCounterID=shmget(_counterKey, 1, IPC_CREAT | IPC_EXCL | SHM_NORESERVE | 0666);
+        _sharedCounterID=shmget(_counterKey, 1, SHM_FLAGS);
 
         if (_sharedCounterID < 0)
             ThrowError(ECOUNTERCREATE, errno);

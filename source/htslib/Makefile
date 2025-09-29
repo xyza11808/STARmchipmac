@@ -13,8 +13,9 @@ CPPFLAGS += -I. -DSAMTOOLS=1
 # TODO: probably update cram code to make it compile cleanly with -Wc++-compat
 CFLAGS   := -g -Wall -O2 $(CFLAGS)
 EXTRA_CFLAGS_PIC = -fpic
-LDFLAGS  =
+LDFLAGS = -lc++ -std=c++11
 LDLIBS   =
+EXTRA_LIBS="-lc++"
 
 prefix      = /usr/local
 exec_prefix = $(prefix)
