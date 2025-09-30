@@ -40,7 +40,7 @@ find "$dataDir" -mindepth 1 -maxdepth 1 -type d | while read -r subdir; do
         # Use a subshell to avoid issues with globbing in the main script.
         (
             cd "$subdir" || exit
-            /Users/yu/RNAseq/STAR/bin/MacOSX_x86_64/STAR \
+            STAR \
                 --genomeDir "$genomeDir" \
                 --runThreadN 10 \
                 --readFilesIn *.fastq.gz \
